@@ -3,6 +3,9 @@ import redis from "redis";
 
 import User from "../models/user.mdl.js";
 
+const redisClient = redis.createClient();
+redisClient.connect();
+
 export const register = async (req, res) => {
     const { username, email, password } = req.body;
     try {
@@ -17,8 +20,6 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     const { username, password } = req.body;
 
-    const redisClient = redis.createClient();
-    redisClient.connect();
 
     try {
 
@@ -40,6 +41,11 @@ export const login = async (req, res) => {
     }
 };
 
-// export const getToken = async () => {
-
-// };
+export const getToken = async (req, res) => {
+    try {
+        const userToken = await redisClient.get('token');
+        res.status(200).json(userToken);
+    } catch (error) {
+        res.status(500).json(error)
+    }
+};
