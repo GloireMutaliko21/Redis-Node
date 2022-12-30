@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import redis from "redis";
 
 import User from "../models/user.mdl.js";
 
@@ -16,6 +17,9 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     const { username, password } = req.body;
 
+    const redisClient = redis.createClient();
+    redisClient.connect();
+
     try {
 
         const user = await User.findOne({ username, password });
@@ -27,8 +31,15 @@ export const login = async (req, res) => {
         const token = await jwt.sign(
             { userId: user._id }, 'JWT_SECRET_KEY', { expiresIn: '24h' }
         );
+
+        redisClient.set('token', token);
+
         res.status(200).json(token);
     } catch (error) {
         res.status(500).json(error);
     }
 };
+
+// export const getToken = async () => {
+
+// };

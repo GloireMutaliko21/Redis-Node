@@ -1,9 +1,12 @@
 import express from "express";
+// import redis from "redis";
 
 import db from './config/db.config.js';
-import userRoute from './routes/user.routes.js'
+import userRoute from './routes/user.routes.js';
 
 const app = express();
+
+// const redisClient = redis.createClient();
 
 //Middlewares
 app.use(express.urlencoded({ extended: false }));
