@@ -1,7 +1,9 @@
 import express from "express";
 
+import { register } from "../controllers/user.ctrl.js";
+
 const router = express.Router();
 
-router.post('/')
+router.post('/register', register);
 
 export default router;
